@@ -1,3 +1,4 @@
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, lit, when, round
 import argparse
@@ -60,15 +61,17 @@ def process_car_rental_data(data_date):
     )
 
     # Read dimension tables from Snowflake
+    # Credentials are read from environment variables; never commit them to the repo.
+    sf_account = os.environ["SNOWFLAKE_ACCOUNT"]
     snowflake_options = {
-        "sfURL": "https://lmpyhix-bq53873.snowflakecomputing.com",
-        "sfAccount": "lmpyhix-bq53873",
-        "sfUser": "admin",
-        "sfPassword": "admin",
-        "sfDatabase": "car_rental",
-        "sfSchema": "PUBLIC",
-        "sfWarehouse": "COMPUTE_WH",
-        "sfRole": "ACCOUNTADMIN"
+        "sfURL": f"https://{sf_account}.snowflakecomputing.com",
+        "sfAccount": sf_account,
+        "sfUser": os.environ["SNOWFLAKE_USER"],
+        "sfPassword": os.environ["SNOWFLAKE_PASSWORD"],
+        "sfDatabase": os.environ.get("SNOWFLAKE_DATABASE", "car_rental"),
+        "sfSchema": os.environ.get("SNOWFLAKE_SCHEMA", "PUBLIC"),
+        "sfWarehouse": os.environ.get("SNOWFLAKE_WAREHOUSE", "COMPUTE_WH"),
+        "sfRole": os.environ.get("SNOWFLAKE_ROLE", "SYSADMIN")
     }
 
     # SNOWFLAKE_SOURCE_NAME = "net.snowflake.spark.snowflake"
