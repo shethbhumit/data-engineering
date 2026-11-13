@@ -1,15 +1,17 @@
+import os
 import snowflake.connector
 import random
 from datetime import datetime, timedelta
 import time
 
 # Snowflake connection parameters
-user = 'admin'
-password = 'admin'
-account = 'guxyhix-bq1234'
-warehouse = 'COMPUTE_WH'
-database = 'PAT'
-schema = 'PUBLIC'
+# Credentials are read from environment variables; never commit them to the repo.
+user = os.environ["SNOWFLAKE_USER"]
+password = os.environ["SNOWFLAKE_PASSWORD"]
+account = os.environ["SNOWFLAKE_ACCOUNT"]
+warehouse = os.environ.get("SNOWFLAKE_WAREHOUSE", "COMPUTE_WH")
+database = os.environ.get("SNOWFLAKE_DATABASE", "PAT")
+schema = os.environ.get("SNOWFLAKE_SCHEMA", "PUBLIC")
 
 # Establish a connection to Snowflake
 conn = snowflake.connector.connect(

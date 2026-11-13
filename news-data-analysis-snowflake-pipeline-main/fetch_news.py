@@ -16,7 +16,7 @@ def upload_to_gcs(bucket_name, destination_blob_name, source_file_name):
 
 def fetch_news_data():
     today = date.today()
-    api_key = '3ef02d8a5fd14f1d9615bff33b1213e3'
+    api_key = os.environ["NEWS_API_KEY"]  # set in the environment; never commit keys
 
     base_url = "https://newsapi.org/v2/everything?q={}&from={}&to={}&sortBy=popularity&apiKey={}&language=en"
     start_date_value = str(today - datetime.timedelta(days=1))
